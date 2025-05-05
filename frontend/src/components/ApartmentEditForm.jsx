@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
+import FormError from "./FormError";
+
 
 const ApartmentEditForm = () => {
   const { slug } = useParams();
@@ -15,7 +17,7 @@ const ApartmentEditForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    setErrors({ ...errors, [name]: null }); // сбрасываем ошибку при вводе
+    setErrors({ ...errors, [name]: null }); // reset the input error
   };
 
   const handleSubmit = async (e) => {
@@ -62,9 +64,7 @@ const ApartmentEditForm = () => {
             className="block w-full p-2 border rounded"
             placeholder={field}
           />
-          {errors[field] && (
-            <p className="text-red-600 text-sm mt-1">{errors[field]}</p>
-          )}
+          <FormError error={errors[field]} />
         </div>
       ))}
 
@@ -77,9 +77,7 @@ const ApartmentEditForm = () => {
           className="block w-full p-2 border rounded"
           placeholder="Количество комнат"
         />
-        {errors.number_of_rooms && (
-          <p className="text-red-600 text-sm mt-1">{errors.number_of_rooms}</p>
-        )}
+        <FormError error={errors.number_of_rooms} />
       </div>
 
       <button type="submit" className="bg-green-600 text-white px-4 py-2 mr-4 rounded">
