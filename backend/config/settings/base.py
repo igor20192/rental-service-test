@@ -44,6 +44,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "config.jwt_cookie_middleware.JWTAuthenticationFromCookieMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
