@@ -114,7 +114,7 @@ python manage.py spectacular --file schema.yaml
 ```bash
 # Restart after changes
 docker-compose down
-docker-compose up --build
+docker-compose -f docker-compose-dev.yml up --build
 
 # Enter backend container
 docker exec -it rental-service-backend-1 bash
