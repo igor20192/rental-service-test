@@ -41,7 +41,7 @@ A full-featured web application for posting, viewing, and managing apartment ren
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/rental-service.git
+git clone git@github.com:igor20192/rental-service-test.git
 cd rental-service
 ```
 
