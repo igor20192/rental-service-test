@@ -1,38 +1,30 @@
 # Base image
-FROM python:3.13-slim AS base
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-
-# Set work directory
-WORKDIR /app
+FROM python:3.12-slim-bullseye
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
-    netcat-openbsd \
+    netcat \
     && rm -rf /var/lib/apt/lists/*
 
-# Development stage
-FROM base AS dev
+# Set working directory
+WORKDIR /app
 
-# Install dependencies
-COPY requirements/ requirements/
-RUN pip install --no-cache-dir -r requirements/dev.txt
+# Environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Copy project
+# Install Python dependencies
+COPY requirements/ ./requirements/
+RUN pip install --upgrade pip && \
+    pip install -r requirements/base.txt
+
+# Copy code
 COPY . .
 
-# Entrypoint
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+# Give permissions to scripts (if using entrypoint.sh)
+# RUN chmod +x ./entrypoint.sh
 
-# Command
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-# Production stage
-# TODO: Add production stage
+# Set entry point
+# ENTRYPOINT ["./entrypoint.sh"]
