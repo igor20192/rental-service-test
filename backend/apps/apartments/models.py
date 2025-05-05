@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _  # Для интернационализации
+from django.utils.translation import gettext_lazy as _
 
 
 class Apartment(models.Model):
@@ -43,17 +43,36 @@ class Apartment(models.Model):
 
     def clean(self):
         super().clean()
+        errors = {}
+
         if self.number_of_rooms == 0:
-            raise ValidationError(_("Number of rooms must be greater than zero."))
+            errors["number_of_rooms"] = ValidationError(
+                _("Number of rooms must be greater than zero."),
+                code="invalid_number_of_rooms",
+            )
         if self.square <= 0:
-            raise ValidationError(_("Square must be greater than zero."))
+            errors["square"] = ValidationError(
+                _("Square must be greater than zero."), code="invalid_square"
+            )
         if self.price < 0:
-            raise ValidationError(_("Price must be greater than or equal to zero."))
+            errors["price"] = ValidationError(
+                _("Price must be greater than or equal to zero."), code="invalid_price"
+            )
+
+        if errors:
+            raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        self.full_clean()
+        try:
+            self.full_clean()
+        except ValidationError as e:
+            import logging
+
+            logger = logging.getLogger(__name__)
+            logger.error(f"Validation error: {e.messages}")
+            raise e
         super().save(*args, **kwargs)
 
     def __str__(self):
