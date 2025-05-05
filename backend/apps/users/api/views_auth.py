@@ -11,6 +11,17 @@ logger = logging.getLogger(__name__)
 
 
 class LoginView(APIView):
+    """
+    API view for user login.
+
+    Allows users to log in by providing their email and password.
+    Upon successful authentication, it returns a response with a success message
+    and sets HTTP-only cookies for access and refresh tokens.
+
+    Raises:
+        AuthenticationFailed: If the provided email or password is incorrect.
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
@@ -54,6 +65,16 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """
+    API view for user logout.
+
+    Allows authenticated users to log out. It returns a response with a success
+    message and deletes the access and refresh token cookies.
+
+    Requires:
+        Authentication: The user must be authenticated to access this view.
+    """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -64,6 +85,16 @@ class LogoutView(APIView):
 
 
 class MeView(APIView):
+    """
+    API view to retrieve the current user's information.
+
+    Returns the email, first name, last name, and verification status of the
+    currently authenticated user.
+
+    Requires:
+        Authentication: The user must be authenticated to access this view.
+    """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -79,6 +110,18 @@ class MeView(APIView):
 
 
 class RefreshTokenView(APIView):
+    """
+    API view to refresh the access token using a refresh token.
+
+    Retrieves the refresh token from the HTTP-only cookies, validates it, and
+    returns a new access token as an HTTP-only cookie.
+
+    Raises:
+        AuthenticationFailed: If the refresh token is not found in the cookies.
+        InvalidToken: If the refresh token is invalid or expired.
+
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
