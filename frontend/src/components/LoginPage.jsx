@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     try {
       await login(email, password);
-      navigate("/"); // перенаправляем на главную
+      navigate("/"); // redirect to the main page after successful login
     } catch (err) {
       setError("Неверный email или пароль");
     }
