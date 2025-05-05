@@ -42,7 +42,7 @@ A full-featured web application for posting, viewing, and managing apartment ren
 
 ```bash
 git clone git@github.com:igor20192/rental-service-test.git
-cd rental-service
+cd rental-service-test
 ```
 
 ### 2. Add environment files
@@ -53,7 +53,7 @@ cd rental-service
 ### 3. Run the app
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose-dev.yml up --build
 ```
 
 Available at:
@@ -114,7 +114,7 @@ python manage.py spectacular --file schema.yaml
 ```bash
 # Restart after changes
 docker-compose down
-docker-compose -f docker-compose-dev.yml up --build
+docker-compose up --build
 
 # Enter backend container
 docker exec -it rental-service-backend-1 bash
